@@ -8,7 +8,7 @@ Built to find freelance automation clients without cold blasting —
 only reaches out to people actively describing a problem you can solve.
 <img width="1487" height="391" alt="Screenshot 2026-07-14 124918" src="https://github.com/user-attachments/assets/06849ec0-b508-40b3-9f51-5db296881421" />
 
-
+Demo : https://www.youtube.com/watch?v=rIxQARmEQ1A
 ## What it does
 
 1. User submits a niche via a form trigger
