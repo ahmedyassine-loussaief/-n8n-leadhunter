@@ -15,7 +15,7 @@ Built to find freelance automation clients without cold blasting — only reache
 2. Workflow scrapes 2 Reddit RSS feeds per niche (6 niches total)
 3. Deduplicates against previously seen posts (Google Sheets)
 4. AI (DeepSeek) qualifies each post and scores it 1-10
-5. Filters only high-score posts (≥7)
+5. Filters only high-score posts (≥6)
 6. Generates a personalized cold DM for each qualified lead
 7. Sends lead + DM to Discord for manual review before sending
 8. Error notifications on failures (Discord alerts)
