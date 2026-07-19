@@ -46,8 +46,12 @@ Rotate niches across runs to keep a steady lead flow — the seen-post memory is
 > **Score:** 7/10 (inferred)
 > **Suggested message:**
 > "Hey! Saw your post about juggling client intake by hand — I actually build automations for this exact kind of thing…"
+
+
 Example:
-> <img width="1390" height="716" alt="Screenshot 2026-07-18 170614" src="https://github.com/user-attachments/assets/02455636-7ce9-4a33-8ee7-7b3378b7d493" />
+<img width="1452" height="478" alt="Screenshot 2026-07-17 183439" src="https://github.com/user-attachments/assets/5c36501b-3cf6-4ac7-a48c-9bb11e755edb" />
+
+
 
 Copy, tweak one line, send. That's the whole workflow.
 
