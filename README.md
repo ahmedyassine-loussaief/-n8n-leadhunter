@@ -4,7 +4,7 @@
 
 Stop scrolling Reddit for clients. LeadHunter reads six business communities for you, scores every fresh post for automation pain, and delivers qualified leads to your Discord — each one with a personalized outreach DM already written.If you sell automation, workflows, or "I'll fix your repetitive work" services, your best clients are complaining about their problems on Reddit right now. LeadHunter finds them while you do billable work.
 
-▶ Run it instantly on indie.money — no setup required: 
+▶ Run it instantly on indie.money — no setup required: https://7jtbhw.s.indie.money/
 
 ---
 
