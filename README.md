@@ -1,178 +1,77 @@
-# LeadHunter — n8n Reddit Lead Generation Workflow
-<img width="1517" height="536" alt="Screenshot 2026-07-16 162149" src="https://github.com/user-attachments/assets/60f299dc-5ee1-41fb-b023-6b1b0b5cc03e" />
+# 🎯 LeadHunter — Reddit Lead Finder for Automation Builders
+<img width="1483" height="989" alt="Screenshot 2026-07-17 183439" src="https://github.com/user-attachments/assets/cfd72f22-2709-4cd8-a63e-be32a5d800eb" />
 
-An automated lead generation tool that scrapes Reddit for potential clients, qualifies them with AI, generates personalized cold DMs, and sends everything to a Discord review queue for manual sending.
+**Stop scrolling Reddit for clients. LeadHunter reads six business communities for you, scores every fresh post for automation pain, and delivers qualified leads to your Discord — each one with a personalized outreach DM already written.**
 
-Built to find freelance automation clients without cold blasting — only reaches out to people actively describing a problem you can solve.
-
-
-**Live on indie.money:** 
----
-
-## What It Does
-
-1. User submits a niche via webhook (`GET /leadhunter?niche=saas`)
-2. Workflow scrapes 2 Reddit RSS feeds per niche (6 niches total)
-3. Deduplicates against previously seen posts (Google Sheets)
-4. AI (DeepSeek) qualifies each post and scores it 1-10
-5. Filters only high-score posts (≥6)
-6. Generates a personalized cold DM for each qualified lead
-7. Sends lead + DM to Discord for manual review before sending
-8. Error notifications on failures (Discord alerts)
+If you sell automation, workflows, or "I'll fix your repetitive work" services, your best clients are complaining about their problems on Reddit right now. LeadHunter finds them while you do billable work.
 
 ---
 
-## Supported Niches
+## What it does
 
-| Niche | Subreddits |
+Every run, the agent:
+
+1. **Pulls the newest posts** from a curated pair of subreddits for the niche you pick
+2. **Filters out everything it has already seen** — a built-in memory means you never get the same lead twice
+3. **Scores each fresh post 1–10** with a strict AI qualification rubric tuned for automation work:
+   - ✅ Real, recurring manual task (daily / weekly / per-order pain)
+   - ✅ Poster owns the business or can buy a fix
+   - ✅ Explicit asks or quantified cost ("3 hours a day", "$X lost every month") score highest
+   - ❌ Rants, tool-shopping threads, "no self-promo" flairs, case studies, and one-time decisions are disqualified on sight — so you don't burn goodwill (or break subreddit rules) messaging the wrong people
+4. **Writes a custom cold DM for every post scoring 6+** — it quotes the poster's exact problem, explains why it happens, proposes 2–3 concrete things you'd build, and ends with one specific question. No corporate buzzwords, no "streamline/leverage/unlock" filler
+5. **Posts each lead to your Discord channel**: post link, pain point, score, and the ready-to-send message
+
+No qualifying leads this run? You get a short "nothing scored 6+" note instead of silence, so you always know it ran.
+
+## Six niches, one parameter
+
+Call the agent's webhook with a single `niche` value:
+
+| `niche=` | Communities watched |
 |---|---|
-| Real Estate | r/realestate + r/realtors |
-| E-Commerce | r/dropship + r/FulfillmentByAmazon |
-| Coaching | r/Coaching + r/entrepreneur |
-| Agency | r/agency + r/digitalmarketing |
-| SaaS | r/SaaS + r/startups |
-| Small Business | r/smallbusiness + r/Entrepreneur |
+| `saas` | r/SaaS + r/startups |
+| `realestate` | r/realestate + r/realtors |
+| `ecommerce` | r/dropship + r/FulfillmentByAmazon |
+| `coaching` | r/Coaching + r/entrepreneur |
+| `agency` | r/agency + r/digitalmarketing |
+| `smallbuisness` | r/smallbusiness + r/Entrepreneur |
 
----
+Rotate niches across runs to keep a steady lead flow — the seen-post memory is shared, so every run only spends effort on genuinely new posts.
 
-## Workflow Architecture
-Webhook (/leadhunter?niche=saas)
-→ Respond to Webhook (200 OK)
-→ nicheextractor (Set node)
-→ NicheRouter (Switch node)
-→ 6 HTTP Request nodes (Reddit RSS feeds)
-→ XML → Split Out → ExtractFields (Code node)
-→ Merge (combines all 6 branches)
-→ GetSeenPosts (Google Sheets)
-→ CheckForSeenPosts (Code node — dedup by URL)
-→ IF node (isSeen true/false)
-→ true → AllPostsAreSeen (Discord notification) → skip
-→ false → AddNewPosts (append to SeenPosts sheet)
-→ LoopOverPosts (splitInBatches, batch size 3)
-→ RatingPosts (DeepSeek — scores 1-10)
-→ Parser (Code node — extracts JSON)
-→ NicheAndUrlAdder (Set node)
-→ Wait node (rate limit protection)
-→ FilterHighScores (score ≥6)
-→ AreThereHighScores? (IF node)
-→ NoHighScoreNotification (Discord)
-→ AddedTitlerAndContent (Set node)
-→ ColdDmWriter (DeepSeek — generates personalized DM)
-→ Parser1 (Code node — extracts DM)
-→ GatherFinalInfo (Set node)
-→ FinalMessageSender (Discord — sends lead + DM for review)
+## What lands in your Discord
 
-text
+> 🎯 **New Lead — service-based startups**
+> **Post:** reddit.com/r/Entrepreneur/…
+> **Pain point:** manually carrying and posting client documents
+> **Score:** 7/10 (inferred)
+> **Suggested message:**
+> "Hey! Saw your post about juggling client intake by hand — I actually build automations for this exact kind of thing…"
+Example:
+> <img width="1390" height="716" alt="Screenshot 2026-07-18 170614" src="https://github.com/user-attachments/assets/02455636-7ce9-4a33-8ee7-7b3378b7d493" />
 
----
+Copy, tweak one line, send. That's the whole workflow.
 
-## AI Models
+## Setup — under 5 minutes
 
-| Node | Model | Purpose |
-|---|---|---|
-| RatingPosts | DeepSeek Chat | Post qualification + scoring |
-| ColdDmWriter | DeepSeek Chat | Personalized DM generation |
+You bring exactly one thing: **a Discord bot token** for the server where you want leads delivered (create one free at discord.com/developers, invite it to your server with send-message permission).
 
----
+Then set two values on your instance:
+- `DISCORD_GUILD_ID` — your server ID
+- `DISCORD_CHANNEL_ID` — the channel that should receive leads
 
-## Scoring System
+AI scoring and DM writing are included — **no AI provider account or API key needed.**
 
-- **1-3:** Disqualified — spam, no recurring task, solution-sharing, "I will not promote" posts, interpersonal problems
-- **4-6:** Weak signal — real task exists but low urgency or inferred
-- **7-8:** Strong signal — explicit recurring pain, business owner context
-- **9-10:** High priority — quantified cost, explicit ask for solution
+## Run it your way
 
----
+- **On demand**: hit the webhook with `{"niche": "saas"}` whenever you want fresh leads
+- **On a schedule**: point any scheduler (cron, calendar automation, another agent) at the webhook and wake up to leads
+- Each run rates up to 9 fresh posts and finishes in well under a minute
 
-## DM Generation Rules
+## Why this beats manual prospecting
 
-| Score | Approach |
-|---|---|
-| 9-10 | Direct, references pain point with confidence |
-| 7-8 | Softer, names a pattern without asserting their words |
-| 6 | Question only, no automation mention |
-| Inferred pain points | Never stated as confirmed fact |
+- **Rule-safe**: posts flaired "I will not promote" or from no-solicitation threads are auto-disqualified — protects your accounts and reputation
+- **Zero duplicate outreach**: the seen-post memory guarantees each prospect is surfaced once, ever
+- **Conservative by design**: the rubric prefers missing a weak lead over handing you a bad one — when it says 6+, the pain is real and the poster can pay
+- **Personalized at scale**: every DM is grounded in what the poster actually wrote; if a message could be sent to anyone, it gets rewritten
 
-**Tone Rules:**
-- Casual and direct, no corporate language
-- Under 5 sentences, ends on a question
-- No banned words: streamline, leverage, game-changer, optimize, solution, revolutionize
-- Never a call-to-action
-
----
-
-## Deduplication
-
-- **SeenPosts Google Sheet** stores all processed URLs
-- **CheckForSeenPosts** Code node compares incoming URL against existing
-- Already seen posts skipped automatically on next run
-- New posts appended to sheet after processing
-
----
-
-## Error Handling
-
-| Failure Point | Notification |
-|---|---|
-| Subreddit fetch error | Discord alert — rate limit or feed unavailable |
-| AI scoring failure | Discord alert — service issue |
-| DM generation failure | Discord alert — service issue |
-| No qualifying leads | Discord — "No posts scored 6+ this run" |
-| All posts already seen | Discord — "No new posts found" |
-
----
-
-## Discord Output Example
-🎯 New Lead — ecommerce
-
-Post: https://www.reddit.com/r/dropship/comments/12345/
-Pain point: manually calculating and consolidating costs
-Score: 6/10 (inferred)
-Logged at: 2026-07-16T15:12:38.289Z
-niche: ecommerce
-
-Suggested message:
-Hey! Saw your post about manually calculating and consolidating various costs across different spreadsheets — I actually build automations for this exact kind of thing...
-
-text
-
----
-
-## Setup
-
-
-1. **Reconnect credentials:**
-   - Google Sheets OAuth2 (deduplication)
-   - OpenRouter API (DeepSeek Chat)
-   - Discord Webhook (leads + error notifications)
-2. **Create a Google Sheet** with columns: `url`, `seen`, `niche`
-3. **Configure webhook:** `GET /leadhunter?niche=saas`
-4. **Available niches:** `saas`, `ecommerce`, `realestate`, `coaching`, `agency`, `smallbusiness`
-
----
-
-## Known Limitations
-
-- Reddit RSS feeds have limited post history (~25 posts per feed)
-- Rate limits on AI providers — Wait node added between iterations
-- DMs are generated for review only — manual sending required
-- Unauthenticated Reddit requests may occasionally hit rate limits (future fix: Reddit OAuth)
-
----
-
-## What's Changed (v2)
-
-| Change | Description |
-|---|---|
-| **RSS → HTTP Request** | Replaced unsupported RSS nodes with HTTP + XML parsing |
-| **Webhook trigger** | Replaced Form Trigger with webhook (`GET /leadhunter?niche=saas`) |
-| **Error handling** | Added Discord notifications for all failure points |
-| **User feedback** | Added "no leads found" and "all posts seen" messages |
-| **Simplified credentials** | Consolidated to single Discord webhook |
-
----
-
-## Author
-
-**Ahmed Yassine Loussaief** — n8n Automation Specialist
-- [LinkedIn](https://www.linkedin.com/in/ahmedyassine-loussaief-6393a7339/)
+One good client covers years of runs. Point it at your niche and let Reddit come to you. 🚀
