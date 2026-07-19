@@ -1,5 +1,5 @@
 # 🎯 LeadHunter — Reddit Lead Finder for Automation Builders
-<img width="1483" height="989" alt="Screenshot 2026-07-17 183439" src="https://github.com/user-attachments/assets/cfd72f22-2709-4cd8-a63e-be32a5d800eb" />
+<img width="1452" height="478" alt="Screenshot 2026-07-17 183439" src="https://github.com/user-attachments/assets/8a8bc12d-8d25-42b6-85cf-9008bf61a9ce" />
 
 **Stop scrolling Reddit for clients. LeadHunter reads six business communities for you, scores every fresh post for automation pain, and delivers qualified leads to your Discord — each one with a personalized outreach DM already written.**
 
@@ -49,7 +49,8 @@ Rotate niches across runs to keep a steady lead flow — the seen-post memory is
 
 
 Example:
-<img width="1452" height="478" alt="Screenshot 2026-07-17 183439" src="https://github.com/user-attachments/assets/5c36501b-3cf6-4ac7-a48c-9bb11e755edb" />
+
+<img width="1390" height="716" alt="Screenshot 2026-07-18 170614" src="https://github.com/user-attachments/assets/50d31eb5-6df3-4ece-81f6-1c6c8ce6e479" />
 
 
 
