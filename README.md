@@ -1,9 +1,8 @@
 # 🎯 LeadHunter — Reddit Lead Finder for Automation Builders
 <img width="1452" height="478" alt="Screenshot 2026-07-17 183439" src="https://github.com/user-attachments/assets/8a8bc12d-8d25-42b6-85cf-9008bf61a9ce" />
 
-**Stop scrolling Reddit for clients. LeadHunter reads six business communities for you, scores every fresh post for automation pain, and delivers qualified leads to your Discord — each one with a personalized outreach DM already written.**
 
-If you sell automation, workflows, or "I'll fix your repetitive work" services, your best clients are complaining about their problems on Reddit right now. LeadHunter finds them while you do billable work.
+Stop scrolling Reddit for clients. LeadHunter reads six business communities for you, scores every fresh post for automation pain, and delivers qualified leads to your Discord — each one with a personalized outreach DM already written.If you sell automation, workflows, or "I'll fix your repetitive work" services, your best clients are complaining about their problems on Reddit right now. LeadHunter finds them while you do billable work.▶ Run it instantly on indie.money — no setup required: 
 
 ---
 
@@ -56,21 +55,53 @@ Example:
 
 Copy, tweak one line, send. That's the whole workflow.
 
-## Setup — under 5 minutes
+## Setup — indie.money buyers
+What you need before activating:
 
-You bring exactly one thing: **a Discord bot token** for the server where you want leads delivered (create one free at discord.com/developers, invite it to your server with send-message permission).
+A Discord bot token (free, takes 5 minutes)
+An OpenRouter API key (free account, costs less than $0.01 per run)
+Your Discord server and channel IDs
+## Steps to create the above if you don't have them:
+## Step 1 — Create a Discord bot
 
-Then set two values on your instance:
-- `DISCORD_GUILD_ID` — your server ID
-- `DISCORD_CHANNEL_ID` — the channel that should receive leads
+Go to discord.com/developers/applications
+Click "New Application" → give it any name
+Go to "Bot" → click "Add Bot" → copy the bot token
+Go to "OAuth2" → "URL Generator" → select "bot" scope → select "Send Messages" permission
+Copy the generated URL, open it in your browser, invite the bot to your server
 
-AI scoring and DM writing are included — **no AI provider account or API key needed.**
+## Step 2 — Get your Discord IDs
+
+Open Discord → Settings → Advanced → enable Developer Mode
+Right-click your server name → "Copy Server ID" → this is your DISCORD_GUILD_ID
+Right-click your target channel → "Copy Channel ID" → this is your DISCORD_CHANNEL_ID
+
+## Step 3 — Get your OpenRouter API key
+
+Go to openrouter.ai and create a free account
+Go to "Keys" → create a new API key
+
+LeadHunter uses DeepSeek Chat — one of the most accurate models for lead scoring at under $0.01 per run. Your key, your costs, full transparency.
+## Step 4 — Activate on indie.money
+When activating LeadHunter you'll be asked to fill in:
+<img width="1070" height="507" alt="image" src="https://github.com/user-attachments/assets/ce513e21-1852-4ec9-9fc5-ad936546c1e2" />
+
+DISCORD_GUILD_ID — your server ID
+DISCORD_CHANNEL_ID — your channel ID
+Discord bot token — as a credential
+OpenRouter API key — as a credential
+
 
 ## Run it your way
+On indie.money, use the built-in interface and fill in the parameter as shown:
+URL Parameters : niche=saas
+Body (JSON) : {"niche": "saas"}
+Available niche values: saas ,realestate ,ecommerce ,coaching ,agency ,smallbuisness
+<img width="784" height="366" alt="image" src="https://github.com/user-attachments/assets/75e9f8be-0805-4110-a793-96f0d261e928" />
 
-- **On demand**: hit the webhook with `{"niche": "saas"}` whenever you want fresh leads
-- **On a schedule**: point any scheduler (cron, calendar automation, another agent) at the webhook and wake up to leads
-- Each run rates up to 9 fresh posts and finishes in well under a minute
+On demand: hit the webhook whenever you want fresh leads
+On a schedule: point any scheduler at the webhook and wake up to leads
+Each run scores up to 9 fresh posts and finishes in under a minute
 
 ## Why this beats manual prospecting
 
