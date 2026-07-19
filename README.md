@@ -88,6 +88,9 @@ When activating LeadHunter you'll be asked to fill in:
 
 DISCORD_GUILD_ID — your server ID
 DISCORD_CHANNEL_ID — your channel ID
+
+<img width="642" height="521" alt="image" src="https://github.com/user-attachments/assets/04c6320f-52f4-4858-8c29-df9290f0fd14" />
+
 Discord bot token — as a credential
 OpenRouter API key — as a credential
 
